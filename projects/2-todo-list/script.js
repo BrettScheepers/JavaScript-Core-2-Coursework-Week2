@@ -1,6 +1,31 @@
 function populateTodoList(todos) {
   let list = document.getElementById("todo-list");
-  // Write your code to create todo list elements with completed and delete buttons here, all todos should display inside the "todo-list" element.
+  
+  todos.forEach( item => {
+    let todo = document.createElement('li');
+    todo.className += 'list-group-item d-flex justify-content-between align-items-center';
+    todo.innerHTML = `${item.task}
+                      <span class="badge bg-primary rounded-pill">
+                          <i class="fa fa-check" aria-hidden="true"></i>
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                      </span>`
+    list.appendChild(todo);
+  })
+
+  const checkBtns = document.querySelectorAll('.fa-check');
+  const trashBtns = document.querySelectorAll('.fa-trash');
+
+  checkBtns.forEach( item => {
+    item.addEventListener('click', (e) => {
+      e.currentTarget.parentElement.parentElement.classList.toggle('line-through');
+    })
+  })
+
+  trashBtns.forEach( item => {
+    item.addEventListener('click', (e) => {
+      e.currentTarget.parentElement.parentElement.remove();
+    })
+  })
 }
 
 // These are the same todos that currently display in the HTML
@@ -16,10 +41,40 @@ populateTodoList(todos);
 function addNewTodo(event) {
   // The code below prevents the page from refreshing when we click the 'Add Todo' button.
   event.preventDefault();
-  // Write your code here... and remember to reset the input field to be blank after creating a todo!
+  
+  let list = document.getElementById("todo-list");
+  let todoValue = document.getElementById('todoInput');
+  let todo = document.createElement('li');
+    todo.className += 'list-group-item d-flex justify-content-between align-items-center';
+    todo.innerHTML = `${todoValue.value}
+                      <span class="badge bg-primary rounded-pill">
+                          <i class="fa fa-check" aria-hidden="true"></i>
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                      </span>`
+  
+  let checkBtn = todo.querySelector('.fa-check');
+  let trashBtn = todo.querySelector('.fa-trash');
+
+  checkBtn.addEventListener('click', (e) => {
+    e.currentTarget.parentElement.parentElement.classList.toggle('line-through');
+  })
+
+  trashBtn.addEventListener('click', (e) => {
+    e.currentTarget.parentElement.parentElement.remove();
+  })
+  
+  list.appendChild(todo);
+  todoValue.value = '';
 }
 
 // Advanced challenge: Write a fucntion that checks the todos in the todo list and deletes the completed ones (we can check which ones are completed by seeing if they have the line-through styling applied or not).
-function deleteAllCompletedTodos() {
-  // Write your code here...
+function deleteAllCompletedTodos(e) {
+  e.preventDefault();
+
+  let allTodos = document.querySelectorAll('.list-group-item, .d-flex, .justify-content-between, .align-items-center');
+  // console.log(allTodos);
+
+  allTodos.forEach( item => {
+    if (item.classList.contains('line-through')) item.remove();
+  })
 }
